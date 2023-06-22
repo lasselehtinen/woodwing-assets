@@ -59,6 +59,26 @@ test('can bulkupdate files', function () {
     expect($searchResults->hits[0]->metadata->gtin)->toBe('1234567890123');
 });
 
+test('can update metadata', function () {
+    $temporaryFilename = tempnam('/tmp', 'ElvisTest');
+    $createResults = $this->assets->create(filename: $temporaryFilename, folderPath: '/Users/elvis-package-testing/');
+    expect($createResults)->toBeObject();
+    expect($createResults)->toHaveProperty('id');
+    expect($createResults->id)->toBeString();
+
+    // Update the metadata
+    $updateResults = $this->assets->update(id: $createResults->id, metadata: ['gtin' => 1234567890123]);
+    expect($updateResults)->toBeObject();
+    expect($updateResults)->toHaveProperty('id');
+
+    // Query for asset and check that metadata is updated
+    $searchResults = $this->assets->search(query: 'id:'.$createResults->id);
+    expect($searchResults)->toBeObject();
+    expect($searchResults->hits)->toHaveCount(1);
+    expect($searchResults->hits[0]->metadata)->toHaveProperty('gtin');
+    expect($searchResults->hits[0]->metadata->gtin)->toBe('1234567890123');
+});
+
 test('can remove files', function () {
     // Upload a test file
     $temporaryFilename = tempnam('/tmp', 'ElvisTest');

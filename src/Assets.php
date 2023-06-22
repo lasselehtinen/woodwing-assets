@@ -155,6 +155,39 @@ class Assets
     }
 
     /**
+     * Update.
+     *
+     * Update an asset.
+     *
+     * @param  string  $id         The file to be updated in Elvis. If you do not specify a filename explicitly through the metadata, the filename of the uploaded file will be used.
+     * @param  string  $filename         The file to be updated in Elvis. If you do not specify a filename explicitly through the metadata, the filename of the uploaded file will be used.
+     * @param  array  $metadata         Array containing the metadata for the asset as an array. Key is the metadata field name and value is the actual value.
+     * @param  string  $metadataToReturn Comma-delimited list of metadata fields to return in hits. It is good practice to always specify just the metadata fields that you need. This will make the searches faster because less data needs to be transferred over the network. Read more at https://elvis.tenderapp.com/kb/api/rest-search
+     * @return (object) Information about the updated asset
+     */
+    public function update(
+        string $id,
+        ?string $filename = null,
+        ?array $metadata = null,
+        ?string $metadataToReturn = 'all',
+    ) {
+        $response = $this->client->request('POST', 'update', [
+            'headers' => [
+                'Authorization' => 'Bearer '.$this->authToken,
+            ],
+            'query' => [
+                'id' => $id,
+                'metadata' => (! empty($metadata)) ? json_encode($metadata) : null,
+                'metadataToReturn' => $metadataToReturn,
+            ],
+        ]);
+
+        $body = json_decode($response->getBody()->getContents());
+
+        return $body;
+    }
+
+    /**
      * Remove.
      *
      * Remove one or more assets. This will remove only assets, no folders.

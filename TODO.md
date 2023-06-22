@@ -2,7 +2,7 @@
 
 These endpoints are not supported yet
 
-- update
+- update files (metadata update always exists)
 - createRelation
 - removeRelation
 - createAuthKey
