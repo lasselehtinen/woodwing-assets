@@ -171,7 +171,8 @@ class Assets
         ?array $metadata = null,
         ?string $metadataToReturn = 'all',
     ) {
-        $response = $this->client->request('POST', 'update', [
+        // Form request
+        $request = [
             'headers' => [
                 'Authorization' => 'Bearer '.$this->authToken,
             ],
@@ -180,7 +181,18 @@ class Assets
                 'metadata' => (! empty($metadata)) ? json_encode($metadata) : null,
                 'metadataToReturn' => $metadataToReturn,
             ],
-        ]);
+        ];
+
+        if (! empty($filename)) {
+            $request['multipart'] = [
+                [
+                    'name' => 'Filedata',
+                    'contents' => fopen($filename, 'r'),
+                ],
+            ];
+        }
+
+        $response = $this->client->request('POST', 'update', $request);
 
         $body = json_decode($response->getBody()->getContents());
 

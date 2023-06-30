@@ -79,6 +79,28 @@ test('can update metadata', function () {
     expect($searchResults->hits[0]->metadata->gtin)->toBe('1234567890123');
 });
 
+test('can update asset contents', function () {
+    $temporaryFilename = tempnam('/tmp', 'ElvisTest');
+    file_put_contents($temporaryFilename, 'foobar');
+    $createResults = $this->assets->create(filename: $temporaryFilename, folderPath: '/Users/elvis-package-testing/');
+    expect($createResults)->toBeObject();
+    expect($createResults)->toHaveProperty('id');
+    expect($createResults->id)->toBeString();
+
+    // Update the file
+    $updatedTemporaryFilename = tempnam('/tmp', 'ElvisTest');
+    file_put_contents($updatedTemporaryFilename, 'foobaz');
+    $updateResults = $this->assets->update(id: $createResults->id, filename: $updatedTemporaryFilename);
+    expect($updateResults)->toBeObject();
+    expect($updateResults)->toHaveProperty('id');
+
+    // Download file and check contents
+    $searchResults = $this->assets->search(query: 'id:'.$updateResults->id, appendRequestSecret: true);
+    expect($searchResults)->toBeObject();
+    expect($searchResults->hits)->toHaveCount(1);
+    expect(file_get_contents($searchResults->hits[0]->originalUrl))->toBe('foobaz');
+});
+
 test('can remove files', function () {
     // Upload a test file
     $temporaryFilename = tempnam('/tmp', 'ElvisTest');
