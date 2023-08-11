@@ -92,7 +92,7 @@ class Assets
      */
     public function browse(
         string $path,
-        ?string $fromRoot = null,
+        string $fromRoot = null,
         ?bool $includeFolders = true,
         ?bool $includeAsset = true,
         ?string $includeExtensions = '.collection, .dossier, .task'
@@ -128,8 +128,8 @@ class Assets
      */
     public function create(
         string $filename,
-        ?string $folderPath = null,
-        ?array $metadata = null,
+        string $folderPath = null,
+        array $metadata = null,
         ?string $metadataToReturn = 'all',
     ) {
         $response = $this->client->request('POST', 'create', [
@@ -167,8 +167,8 @@ class Assets
      */
     public function update(
         string $id,
-        ?string $filename = null,
-        ?array $metadata = null,
+        string $filename = null,
+        array $metadata = null,
         ?string $metadataToReturn = 'all',
     ) {
         // Form request
@@ -211,9 +211,9 @@ class Assets
      * @return (object) Either processedCount or processId depending if async is true or false
      */
     public function remove(
-        ?string $query = null,
+        string $query = null,
         ?array $ids = [],
-        ?string $folderPath = null,
+        string $folderPath = null,
         ?bool $async = false
     ) {
         if ($ids !== null && is_array($ids)) {
