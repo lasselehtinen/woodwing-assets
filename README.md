@@ -48,7 +48,7 @@ return [
 ## Usage
 
 ```php
-$assets = new LasseLehtinen\Assets();
+$assets = new \LasseLehtinen\Assets\Assets();
 $searchResults = $assets->search(query: 'Jari Tervo', num: 2);
 ```
 
