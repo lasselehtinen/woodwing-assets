@@ -160,6 +160,36 @@ test('can move/rename files', function () {
     expect($searchResults->hits[0]->metadata->assetPath)->toBe($createResults->metadata->assetPath.'-new');
 });
 
+test('can create authorization keys', function () {
+    // Upload a test file
+    $temporaryFilename = tempnam('/tmp', 'ElvisTest');
+    $createResults = $this->assets->create(filename: $temporaryFilename, folderPath: '/Users/elvis-package-testing/');
+    expect($createResults)->toBeObject();
+    expect($createResults)->toHaveProperty('metadata');
+    expect($createResults->metadata)->toHaveProperty('assetPath');
+    expect($createResults->metadata->assetPath)->toBeString();
+
+    // Create expiry date that is 48 in the future
+    $expiryDate = new DateTime;
+    $expiryDate->add(new DateInterval('PT48H'));
+
+    // authKey for spesific asset ids
+    $createAuthKey = $this->assets->createAuthKey(subject: 'foobar', validUntil: $expiryDate->format('Y-m-d'), assetIds: [$createResults->id]);
+    expect($createAuthKey)->toBeObject();
+    expect($createAuthKey)->toHaveProperty('authKey');
+    expect($createAuthKey)->toHaveProperty('webClientUrl');
+    expect($createAuthKey)->toHaveProperty('desktopClientUrl');
+    expect($createAuthKey)->toHaveProperty('mobileClientUrl');
+
+    // General authKey to upload files
+    $createAuthKey = $this->assets->createAuthKey(subject: 'foobar', validUntil: $expiryDate->format('Y-m-d'), requestUpload: true, importFolderPath: '/Users/elvis-package-testing');
+    expect($createAuthKey)->toBeObject();
+    expect($createAuthKey)->toHaveProperty('authKey');
+    expect($createAuthKey)->toHaveProperty('webClientUrl');
+    expect($createAuthKey)->toHaveProperty('desktopClientUrl');
+    expect($createAuthKey)->toHaveProperty('mobileClientUrl');
+});
+
 test('throws exception when trying to login with incorrect password', function () {
     Config::set('woodwing-assets.username', 'foobar');
     Config::set('woodwing-assets.password', 'foobar');

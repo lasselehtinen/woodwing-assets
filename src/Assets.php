@@ -311,6 +311,71 @@ class Assets
     }
 
     /**
+     * Undocumented function
+     *
+     * @param  string  $subject                   AuthKey subject
+     * @param  string  $validUntil                Expiry date, in one of the date formats supported by Assets Server
+     * @param  array  $assetIds                   Array of asset id's to share, do not specify for a pure upload request (requestUpload must be true is this case)
+     * @param  string|null  $description 	        AuthKey description that will be shown to receiver of the link.
+     * @param  bool|null  $downloadOriginal 	Allow downloading original files. Setting this to true will automatically force downloadPreview to true as well.
+     * @param  bool|null  $downloadPreview 	Allow viewing and downloading previews. Setting this to false will only show thumbnails and will also force downloadOriginal to false.
+     * @param  bool|null  $requestApproval     Request for approval.
+     * @param  bool|null  $requestUpload       Allow uploading new files, must be true when asset id's is not specified.
+     * @param  string  $containerId               Container asset id which uploaded files are related to. Only relevant when requestUpload=true.
+     * @param  array|null  $containerIds          Container asset id which uploaded files are related to. Only relevant when requestUpload=true.
+     * @param  string  $importFolderPath     folderPath where files are uploaded. Required when requestUpload=true.
+     * @param  string  $notifyEmail          Email address to send notifications to when upload or approval is finished. Only relevant when requestUpload=true or requestApproval=true.
+     * @param  string|null  $sort                 Client setting, specify a comma-delimited list of fields to sort the results on. Follows the same behavior as sort in REST - search call, see also REST - search.
+     * @param  array|null  $downloadPresetIds     Comma-delimited list of Download Preset IDs. Allows the downloading of renditions generated according to these Preset settings.
+     * @param  bool|null  $watermarked         Shows watermarks on thumbnails and previews in Shared Links.
+     * @return (object) Returns object with authKey, webClientUrl, desktopClientUrl and mobileClientUrl properties
+     */
+    public function createAuthKey(
+        string $subject,
+        string $validUntil,
+        ?array $assetIds = [],
+        string $description = null,
+        ?bool $downloadOriginal = false,
+        ?bool $downloadPreview = false,
+        ?bool $requestApproval = false,
+        ?bool $requestUpload = false,
+        ?string $containerId = '',
+        ?array $containerIds = [],
+        ?string $importFolderPath = '',
+        ?string $notifyEmail = '',
+        ?string $sort = 'assetCreated-desc',
+        ?array $downloadPresetIds = [],
+        ?bool $watermarked = false,
+    ) {
+        $response = $this->client->request('POST', 'createAuthKey', [
+            'headers' => [
+                'Authorization' => 'Bearer '.$this->authToken,
+            ],
+            'query' => [
+                'subject' => $subject,
+                'validUntil' => $validUntil,
+                'assetIds' => implode(',', $assetIds),
+                'description' => $description,
+                'downloadOriginal' => $downloadOriginal,
+                'downloadPreview' => $downloadPreview,
+                'requestApproval' => $requestApproval,
+                'requestUpload' => $requestUpload,
+                'containerId' => $containerId,
+                'containerIds' => implode(',', $containerIds),
+                'importFolderPath' => $importFolderPath,
+                'notifyEmail' => $notifyEmail,
+                'sort' => $sort,
+                'downloadPresetIds' => implode(',', $downloadPresetIds),
+                'watermarked' => $watermarked,
+            ],
+        ]);
+
+        $body = json_decode($response->getBody()->getContents());
+
+        return $body;
+    }
+
+    /**
      * Get the authToken.
      *
      * @return string
