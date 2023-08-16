@@ -376,6 +376,58 @@ class Assets
     }
 
     /**
+     * Create relation.
+     *
+     * @param  string  $relationType      The type of relation to create. See https://helpcenter.woodwing.com/hc/en-us/articles/360041852112
+     * @param  string  $target1Id         The id of the asset on one side of the relation. If the relation type is a directional relation, this must be the id of the 'parent'-side.
+     * @param  string  $target2Id         The id of the asset on the other side of the relation. If the relation type is a directional relation, this must be the id of the 'child'-side.
+     * @return object
+     */
+    public function createRelation(
+        string $relationType,
+        string $target1Id,
+        string $target2Id,
+    ) {
+        $response = $this->client->request('POST', 'createRelation', [
+            'headers' => [
+                'Authorization' => 'Bearer '.$this->authToken,
+            ],
+            'query' => [
+                'relationType' => $relationType,
+                'target1Id' => $target1Id,
+                'target2Id' => $target2Id,
+            ],
+        ]);
+
+        $body = json_decode($response->getBody()->getContents());
+
+        return $body;
+    }
+
+    /**
+     * Remove relation.
+     *
+     * @param  array  $relationIds    A comma-delimited list of relation ids to be removed. To find the relation ids, use a relation search.
+     * @return object
+     */
+    public function removeRelation(
+        array $relationIds,
+    ) {
+        $response = $this->client->request('POST', 'removeRelation', [
+            'headers' => [
+                'Authorization' => 'Bearer '.$this->authToken,
+            ],
+            'query' => [
+                'relationIds' => implode(',', $relationIds),
+            ],
+        ]);
+
+        $body = json_decode($response->getBody()->getContents());
+
+        return $body;
+    }
+
+    /**
      * Get the authToken.
      *
      * @return string

@@ -190,6 +190,54 @@ test('can create authorization keys', function () {
     expect($createAuthKey)->toHaveProperty('mobileClientUrl');
 });
 
+test('can create and remove relations', function () {
+    // Upload a test file
+    $temporaryFilename = tempnam('/tmp', 'ElvisTest');
+    $assetOne = $this->assets->create(filename: $temporaryFilename, folderPath: '/Users/elvis-package-testing/');
+    expect($assetOne)->toBeObject();
+    expect($assetOne)->toHaveProperty('metadata');
+    expect($assetOne->metadata)->toHaveProperty('assetPath');
+    expect($assetOne->metadata->assetPath)->toBeString();
+
+    // Upload another test file
+    $temporaryFilename = tempnam('/tmp', 'ElvisTest');
+    $assetTwo = $this->assets->create(filename: $temporaryFilename, folderPath: '/Users/elvis-package-testing/');
+    expect($assetTwo)->toBeObject();
+    expect($assetTwo)->toHaveProperty('metadata');
+    expect($assetTwo->metadata)->toHaveProperty('assetPath');
+    expect($assetTwo->metadata->assetPath)->toBeString();
+
+    // Create relation
+    $createRelation = $this->assets->createRelation(relationType: 'related', target1Id: $assetOne->id, target2Id: $assetTwo->id);
+    expect($createRelation)->toBeObject();
+
+    // Search for the relation
+    $searchResults = $this->assets->search(query: 'relatedTo:'.$assetOne->id.' relationTarget:child relationType:related');
+
+    // Chech that response is in correct form
+    expect($searchResults)->toBeObject();
+    expect($searchResults->hits)->toHaveCount(1);
+
+    // Check that we have relation returned in the results
+    expect($searchResults->hits[0])->toHaveProperty('relation');
+    $this->assertIsObject($searchResults->hits[0]->relation);
+
+    // Check that the relation information is correct
+    expect($searchResults->hits[0]->relation->relationType)->toBeString('related');
+    expect($searchResults->hits[0]->relation->relationId)->toBeString();
+    expect($searchResults->hits[0]->relation->target1Id)->toBeString($assetOne->id);
+    expect($searchResults->hits[0]->relation->target2Id)->toBeString($assetTwo->id);
+
+    // Remove the relation
+    $removeRelation = $this->assets->removeRelation([$searchResults->hits[0]->relation->relationId]);
+    expect($removeRelation->processedCount)->toBeInt(1);
+
+    // Do the search again, we should not any hits anymore
+    $searchResults = $this->assets->search(query: 'relatedTo:'.$assetOne->id.' relationTarget:child relationType:related');
+    expect($searchResults)->toBeObject();
+    expect($searchResults->hits)->toHaveCount(0);
+});
+
 test('throws exception when trying to login with incorrect password', function () {
     Config::set('woodwing-assets.username', 'foobar');
     Config::set('woodwing-assets.password', 'foobar');
