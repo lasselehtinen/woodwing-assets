@@ -242,6 +242,37 @@ test('can create and remove relations', function () {
     expect($searchResults->hits)->toHaveCount(0);
 });
 
+test('can checkout and undo checkout', function () {
+    // Upload a test file
+    $temporaryFilename = tempnam('/tmp', 'ElvisTest');
+    $createResults = $this->assets->create(filename: $temporaryFilename, folderPath: '/Users/elvis-package-testing/');
+    expect($createResults)->toBeObject();
+    expect($createResults)->toHaveProperty('id');
+    expect($createResults->id)->toBeString();
+
+    // Checkout file
+    $checkout = $this->assets->checkout(assetId: $createResults->id);
+    expect($checkout)->toBeObject();
+    expect($checkout)->toHaveProperty('checkedOut');
+    expect($checkout)->toHaveProperty('checkedOutBy');
+
+    // Search for asset
+    $searchResults = $this->assets->search(query: 'id:'.$createResults->id);
+    expect($searchResults)->toBeObject();
+    expect($searchResults->hits)->toHaveCount(1);
+    expect($searchResults->hits[0]->metadata)->toHaveProperty('checkedOutBy');
+
+    // Undo checkout
+    $undoCheckout = $this->assets->undoCheckout(assetId: $createResults->id);
+    expect($undoCheckout)->toBeTrue();
+
+    // Check that asset was updated
+    $searchResults = $this->assets->search(query: 'id:'.$createResults->id);
+    expect($searchResults)->toBeObject();
+    expect($searchResults->hits)->toHaveCount(1);
+    expect($searchResults->hits[0]->metadata)->not->toHaveProperty('checkedOutBy');
+});
+
 test('throws exception when trying to login with incorrect password', function () {
     Config::set('woodwing-assets.username', 'foobar');
     Config::set('woodwing-assets.password', 'foobar');

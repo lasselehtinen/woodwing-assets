@@ -428,9 +428,48 @@ class Assets
     }
 
     /**
+     * Checkout.
+     *
+     * @param  string  $assetId      ID of the asset to be checked out
+     * @return object
+     */
+    public function checkout(
+        string $assetId,
+    ) {
+        $response = $this->client->request('POST', 'checkout/'.$assetId, [
+            'headers' => [
+                'Authorization' => 'Bearer '.$this->authToken,
+            ],
+        ]);
+
+        $body = json_decode($response->getBody()->getContents());
+
+        return $body;
+    }
+
+    /**
+     * Undo checkout.
+     *
+     * @param  string  $assetId      ID of the asset on which the checkout is undone
+     * @return bool
+     */
+    public function undoCheckout(
+        string $assetId,
+    ) {
+        $response = $this->client->request('POST', 'undocheckout/'.$assetId, [
+            'headers' => [
+                'Authorization' => 'Bearer '.$this->authToken,
+            ],
+        ]);
+
+        $body = json_decode($response->getBody()->getContents());
+
+        return is_object($body);
+    }
+
+    /**
      * Logout
      *
-     * @param  array  $relationIds    A comma-delimited list of relation ids to be removed. To find the relation ids, use a relation search.
      * @return bool
      */
     public function logout()
