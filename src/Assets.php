@@ -428,6 +428,27 @@ class Assets
     }
 
     /**
+     * Logout
+     *
+     * @param  array  $relationIds    A comma-delimited list of relation ids to be removed. To find the relation ids, use a relation search.
+     * @return bool
+     */
+    public function logout()
+    {
+        $response = $this->client->request('POST', 'logout', [
+            'headers' => [
+                'Authorization' => 'Bearer '.$this->authToken,
+            ],
+        ]);
+
+        $body = json_decode($response->getBody()->getContents());
+
+        unset($this->authToken);
+
+        return $body->logoutSuccess;
+    }
+
+    /**
      * Get the authToken.
      *
      * @return string

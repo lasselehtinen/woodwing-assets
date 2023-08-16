@@ -2,6 +2,18 @@
 
 These endpoints are not supported yet
 
-- createRelation
-- removeRelation
-- createAuthKey
+- checkout
+- copy
+- create folder
+- email
+- localization / messages
+- log usage stats
+- Metadata report
+- profile
+- promote
+- Rendition Presets
+- revokeAuthKeys
+- undo checkout
+- updateAuthKey
+- versioning and history
+- ZIP download

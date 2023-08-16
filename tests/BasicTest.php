@@ -7,6 +7,10 @@ beforeEach(function () {
     $this->assets = $assets;
 });
 
+test('can logout', function () {
+    expect($this->assets->logout())->toBeTrue();
+});
+
 test('can get get authentication token', function () {
     expect($this->assets->getAuthToken())->toBeString();
 });
