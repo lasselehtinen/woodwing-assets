@@ -4,8 +4,7 @@
 # API wrapper for WoodWing Assets
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/lasselehtinen/woodwing-assets.svg?style=flat-square)](https://packagist.org/packages/lasselehtinen/woodwing-assets)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/lasselehtinen/woodwing-assets/run-tests?label=tests)](https://github.com/lasselehtinen/woodwing-assets/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/lasselehtinen/woodwing-assets/Check%20&%20fix%20styling?label=code%20style)](https://github.com/lasselehtinen/woodwing-assets/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amain)
+[![Run tests](https://github.com/lasselehtinen/woodwing-assets/actions/workflows/run-tests.yml/badge.svg?branch=main)](https://github.com/lasselehtinen/woodwing-assets/actions/workflows/run-tests.yml)
 [![Total Downloads](https://img.shields.io/packagist/dt/lasselehtinen/woodwing-assets.svg?style=flat-square)](https://packagist.org/packages/lasselehtinen/woodwing-assets)
 
 Package for doing REST API queries against Woodwings Elvis DAM (Digital Asset Management).
