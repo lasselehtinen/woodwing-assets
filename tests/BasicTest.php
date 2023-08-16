@@ -273,6 +273,12 @@ test('can checkout and undo checkout', function () {
     expect($searchResults->hits[0]->metadata)->not->toHaveProperty('checkedOutBy');
 });
 
+test('can send email', function () {
+    // Send email
+    $sendEmail = $this->assets->email(to: ['lasse.lehtinen@wsoy.fi'], subject: 'Testing', body: 'This is from a test. Please ignore.');
+    expect($sendEmail)->toBeTrue();
+});
+
 test('throws exception when trying to login with incorrect password', function () {
     Config::set('woodwing-assets.username', 'foobar');
     Config::set('woodwing-assets.password', 'foobar');

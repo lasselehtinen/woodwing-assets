@@ -467,6 +467,29 @@ class Assets
         return is_object($body);
     }
 
+    public function email(
+        array $to,
+        string $subject,
+        ?string $body = '',
+        ?string $htmlBody = '',
+    ) {
+        $response = $this->client->request('POST', 'notify/email', [
+            'headers' => [
+                'Authorization' => 'Bearer '.$this->authToken,
+            ],
+            'query' => [
+                'to' => $to,
+                'subject' => $subject,
+                'body' => $body,
+                'htmlBody' => $htmlBody,
+            ],
+        ]);
+
+        $body = json_decode($response->getBody()->getContents());
+
+        return is_object($body);
+    }
+
     /**
      * Logout
      *

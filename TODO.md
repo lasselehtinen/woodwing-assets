@@ -4,7 +4,6 @@ These endpoints are not supported yet
 
 - copy
 - create folder
-- email
 - localization / messages
 - log usage stats
 - Metadata report
