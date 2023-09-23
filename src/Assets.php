@@ -216,22 +216,28 @@ class Assets
         string $folderPath = null,
         ?bool $async = false
     ) {
-        if ($ids !== null && is_array($ids)) {
-            $idsCommaSeparated = implode(',', $ids);
+        $idsCommaSeparated = ($ids !== null && is_array($ids)) ? $idsCommaSeparated = implode(',', $ids) : null;
+
+        // It is not possible to combine the ids , q and folderPath parameters. When multiple parameters are provided, only one is used in the following priority:
+        // 1. q 2. ids 3.folderPath
+        if (! empty($query)) {
+            $parameters = ['q' => $query];
+        } elseif (! empty($idsCommaSeparated)) {
+            $parameters = ['ids' => $idsCommaSeparated];
+        } elseif (! empty($folderPath)) {
+            $parameters = ['folderPath' => $folderPath];
         } else {
-            $idsCommaSeparated = null;
+            throw new Exception('Neither query, assets ids or folderPath given to remove');
         }
+
+        // Add async
+        $parameters['async'] = var_export($async, true);
 
         $response = $this->client->request('POST', 'remove', [
             'headers' => [
                 'Authorization' => 'Bearer '.$this->authToken,
             ],
-            'query' => [
-                'q' => $query,
-                'ids' => $idsCommaSeparated,
-                'folderPath' => $folderPath,
-                'async' => $async ? 'true' : 'false',
-            ],
+            'query' => $parameters,
         ]);
 
         $body = json_decode($response->getBody()->getContents());

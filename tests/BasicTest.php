@@ -164,6 +164,10 @@ test('can move/rename files', function () {
     expect($searchResults->hits[0]->metadata->assetPath)->toBe($createResults->metadata->assetPath.'-new');
 });
 
+test('throws exception when trying to remove without any of the three parameters', function () {
+    $this->assets->remove(async: true);
+})->throws(Exception::class);
+
 test('can create authorization keys', function () {
     // Upload a test file
     $temporaryFilename = tempnam('/tmp', 'ElvisTest');
