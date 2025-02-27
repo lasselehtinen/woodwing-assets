@@ -216,7 +216,7 @@ class Assets
         ?string $folderPath = null,
         ?bool $async = false
     ) {
-        $idsCommaSeparated = ($ids !== null && is_array($ids)) ? $idsCommaSeparated = implode(',', $ids) : null;
+        $idsCommaSeparated = (count($ids) > 0) ? implode(',', $ids) : null;
 
         // It is not possible to combine the ids , q and folderPath parameters. When multiple parameters are provided, only one is used in the following priority:
         // 1. q 2. ids 3.folderPath
