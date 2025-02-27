@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Config;
 
 beforeEach(function () {
-    $assets = new LasseLehtinen\Assets\Assets();
+    $assets = new LasseLehtinen\Assets\Assets;
     $this->assets = $assets;
 });
 
@@ -286,5 +286,5 @@ test('can send email', function () {
 test('throws exception when trying to login with incorrect password', function () {
     Config::set('woodwing-assets.username', 'foobar');
     Config::set('woodwing-assets.password', 'foobar');
-    $assets = new LasseLehtinen\Assets\Assets();
+    $assets = new LasseLehtinen\Assets\Assets;
 })->throws(Exception::class);
