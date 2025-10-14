@@ -131,6 +131,7 @@ class Assets
         ?string $folderPath = null,
         ?array $metadata = null,
         ?string $metadataToReturn = 'all',
+        ?bool $autoRename = false,
     ) {
         $response = $this->client->request('POST', 'create', [
             'headers' => [
@@ -140,6 +141,7 @@ class Assets
                 'folderPath' => $folderPath,
                 'metadata' => (! empty($metadata)) ? json_encode($metadata) : null,
                 'metadataToReturn' => $metadataToReturn,
+                'autoRename' => $autoRename,
             ],
             'multipart' => [
                 [
