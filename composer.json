@@ -26,7 +26,7 @@
         "lasselehtinen/laravel-conventions-checker": "^6.0",
         "orchestra/testbench": "^10.0",
         "pestphp/pest": "^4.0",
-        "pestphp/pest-plugin-laravel": "^3.0",
+        "pestphp/pest-plugin-laravel": "^4.0",
         "phpunit/phpunit": "^12.0",
         "spatie/laravel-ray": "^1.35"
     },
