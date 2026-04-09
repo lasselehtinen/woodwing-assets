@@ -2,6 +2,7 @@
 
 namespace LasseLehtinen\Assets\Tests;
 
+use Dotenv\Dotenv;
 use LasseLehtinen\Assets\AssetsServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
@@ -24,7 +25,7 @@ class TestCase extends Orchestra
         config()->set('database.default', 'testing');
 
         // Set credentials
-        $dotenv = \Dotenv\Dotenv::createImmutable(__DIR__.'/../', '.env');
+        $dotenv = Dotenv::createImmutable(__DIR__.'/../', '.env');
         $dotenv->load();
 
         config()->set('woodwing-assets.endpoint', env('WOODWING_ASSETS_ENDPOINT'));
