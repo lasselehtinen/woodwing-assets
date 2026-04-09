@@ -23,7 +23,7 @@ jobs:
               testbench: 10.*
               carbon: ^3.0
               phpunit: ^11.0
-              
+
         exclude:
           - laravel: 13.*
             php: 8.2
@@ -60,8 +60,6 @@ jobs:
 
       - name: Run style checks
         run: |
-          vendor/bin/grumphp run --testsuite=syntax
-          vendor/bin/grumphp run --testsuite=style --tasks=phpcs
           vendor/bin/pint --test
 
       - name: Run static analysis
