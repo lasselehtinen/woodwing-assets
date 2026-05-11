@@ -284,6 +284,34 @@ test('can send email', function () {
     expect($sendEmail)->toBeTrue();
 });
 
+test('can create folders', function () {
+    // Create temporary folder name
+    $temporaryFolderName = '/Users/elvis-package-testing/'.uniqid();
+    $browseResults = $this->assets->browse(path: $temporaryFolderName);
+
+    expect($browseResults)->toBeArray();
+    expect($browseResults)->toHaveCount(0);
+
+    // Create folder
+    $createFolderResults = $this->assets->createFolder(path: $temporaryFolderName);
+
+    // Check that folder is created
+    $browseResults = $this->assets->browse(path: '/Users/elvis-package-testing/', includeAsset: false);
+
+    $folderExists = false;
+
+    foreach ($browseResults as $item) {
+        if ($item->assetPath === $temporaryFolderName) {
+            $folderExists = true;
+            break;
+        }
+    }
+    expect($folderExists)->toBeTrue();
+
+    // Cleanup - remove the created folder
+    $this->assets->remove(folderPath: $temporaryFolderName);
+});
+
 test('throws exception when trying to login with incorrect password', function () {
     Config::set('woodwing-assets.username', 'foobar');
     Config::set('woodwing-assets.password', 'foobar');

@@ -157,6 +157,31 @@ class Assets
     }
 
     /**
+     * Create folder.
+     *
+     * Create a folder
+     *
+     * @param  string  $path  The path where the folder should be created.
+     * @return (object) Information about the newly created folder
+     */
+    public function createFolder(
+        string $path
+    ) {
+        $response = $this->client->request('POST', 'createFolder', [
+            'headers' => [
+                'Authorization' => 'Bearer '.$this->authToken,
+            ],
+            'query' => [
+                'path' => $path,
+            ],
+        ]);
+
+        $body = json_decode($response->getBody()->getContents());
+
+        return $body;
+    }
+
+    /**
      * Update.
      *
      * Update an asset.
